@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Login - Loja FACAMP
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <header>
+
+        <h1>
+            Loja FACAMP
+        </h1>
+
+        <a href="{{ url_for('catalogo') }}">
+            Voltar ao catálogo
+        </a>
+
+    </header>
+
+    <main>
+
+        <h2>
+            Entrar
+        </h2>
+
+        {% if erro %}
+
+        <div class="mensagem-erro">
+            {{ erro }}
+        </div>
+
+        {% endif %}
+
+        <form
+            method="post"
+            class="form-checkout"
+        >
+
+            <!--
+                Guarda informação de que
+                o login começou no checkout
+            -->
+
+            <input
+                type="hidden"
+                name="proximo"
+                value="{{ proximo }}"
+            >
+
+            <label for="email">
+                E-mail
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                name="email"
+                maxlength="160"
+                required
+            >
+
+            <label for="senha">
+                Senha
+            </label>
+
+            <input
+                type="password"
+                id="senha"
+                name="senha"
+                required
+            >
+
+            <button type="submit">
+                Entrar
+            </button>
+
+        </form>
+
+    </main>
+
+</body>
+
+</html>

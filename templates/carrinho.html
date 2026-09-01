@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Carrinho - Loja FACAMP</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+    <header>
+
+        <h1>
+            Loja FACAMP
+        </h1>
+
+        <a href="{{ url_for('catalogo') }}">
+            Voltar ao catálogo
+        </a>
+
+    </header>
+
+    <main>
+
+        <h2>
+            Carrinho
+        </h2>
+
+        {% if itens %}
+
+        <section class="carrinho">
+
+            {% for item in itens %}
+
+            <article class="item-carrinho">
+
+                <div class="item-info">
+
+                    <h3>
+                        {{ item.produto.nome }}
+                    </h3>
+
+                    <p>
+                        Preço unitário:
+                        R$ {{ '%.2f'|format(item.produto.preco) }}
+                    </p>
+
+                    <p>
+                        Quantidade:
+                        <strong>
+                            {{ item.quantidade }}
+                        </strong>
+                    </p>
+
+                    <form
+                        method="post"
+                        action="{{ url_for('remover_carrinho', produto_id=item.produto.id) }}"
+                    >
+
+                        <button
+                            type="submit"
+                            class="botao-remover"
+                        >
+                            Remover do carrinho
+                        </button>
+
+                    </form>
+
+                </div>
+
+                <div class="item-subtotal">
+
+                    <strong>
+                        Subtotal:
+                        R$ {{ '%.2f'|format(item.subtotal) }}
+                    </strong>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
+
+        </section>
+
+        <div class="total-carrinho">
+
+            <h2>
+                Total:
+                R$ {{ '%.2f'|format(total) }}
+            </h2>
+
+            <a
+                class="botao-checkout"
+                href="{{ url_for('checkout') }}"
+            >
+                Finalizar pedido
+            </a>
+
+        </div>
+
+        {% else %}
+
+        <div class="carrinho-vazio">
+
+            <h3>
+                Seu carrinho está vazio.
+            </h3>
+
+            <p>
+                Adicione algum produto para continuar.
+            </p>
+
+            <a
+                class="botao-checkout"
+                href="{{ url_for('catalogo') }}"
+            >
+                Ver produtos
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </main>
+
+</body>
+
+</html>

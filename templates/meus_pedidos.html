@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Meus Pedidos - Loja FACAMP</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+    <header>
+        <h1>Loja FACAMP</h1>
+
+        <a href="{{ url_for('catalogo') }}">
+            Voltar ao catálogo
+        </a>
+    </header>
+
+    <main>
+
+        <h2>Pedidos de {{ cliente.nome }}</h2>
+
+        {% if pedidos %}
+
+            {% for pedido in pedidos %}
+
+            <article class="pedido-card">
+
+                <h3>
+                    Pedido #{{ pedido.id }}
+                </h3>
+
+                <p>
+                    Status:
+                    <strong>{{ pedido.status }}</strong>
+                </p>
+
+                <p>
+                    Data:
+                    {{ pedido.criado_em.strftime('%d/%m/%Y %H:%M') }}
+                </p>
+
+                <h4>Itens</h4>
+
+                {% for item in pedido.itens %}
+
+                <p>
+                    {{ item.produto.nome }}
+                    —
+                    {{ item.quantidade }}x
+                    R$ {{ '%.2f'|format(item.preco_unitario) }}
+                </p>
+
+                {% endfor %}
+
+                <h3>
+                    Total:
+                    R$ {{ '%.2f'|format(pedido.total) }}
+                </h3>
+
+            </article>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p>Nenhum pedido encontrado.</p>
+
+        {% endif %}
+
+    </main>
+
+</body>
+
+</html>

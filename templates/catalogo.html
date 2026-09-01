@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Loja FACAMP
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <header>
+
+        <h1>
+            Loja FACAMP
+        </h1>
+
+        <nav>
+
+            <a href="{{ url_for('carrinho') }}">
+                Carrinho
+            </a>
+
+            {% if cliente_logado %}
+
+            <span class="usuario-logado">
+                Olá, {{ cliente_logado.nome }}
+            </span>
+
+            <a href="{{ url_for('meus_pedidos') }}">
+                Meus Pedidos
+            </a>
+
+            <form
+                method="post"
+                action="{{ url_for('logout') }}"
+                class="form-logout"
+            >
+
+                <button
+                    type="submit"
+                    class="botao-link"
+                >
+                    Sair
+                </button>
+
+            </form>
+
+            {% else %}
+
+            <a href="{{ url_for('login') }}">
+                Entrar
+            </a>
+
+            {% endif %}
+
+        </nav>
+
+    </header>
+
+    <main>
+
+        <h2>
+            Produtos
+        </h2>
+
+        {% if erro %}
+
+        <div class="mensagem-erro">
+            {{ erro }}
+        </div>
+
+        {% endif %}
+
+        <section class="produtos">
+
+            {% for produto in produtos %}
+
+            <article class="card">
+
+                <h3>
+                    {{ produto.nome }}
+                </h3>
+
+                <p>
+                    {{ produto.descricao }}
+                </p>
+
+                <p>
+                    Categoria:
+                    <strong>
+                        {{ produto.categoria.nome }}
+                    </strong>
+                </p>
+
+                <p>
+                    Estoque:
+                    <strong>
+                        {{ produto.estoque }}
+                    </strong>
+                </p>
+
+                <strong class="preco">
+                    R$ {{ '%.2f'|format(produto.preco) }}
+                </strong>
+
+                {% if produto.estoque > 0 %}
+
+                <form
+                    class="form-adicionar"
+                    method="post"
+                    action="{{ url_for(
+                        'adicionar_carrinho',
+                        produto_id=produto.id
+                    ) }}"
+                >
+
+                    <label
+                        for="quantidade-{{ produto.id }}"
+                    >
+                        Quantidade:
+                    </label>
+
+                    <input
+                        type="number"
+                        id="quantidade-{{ produto.id }}"
+                        name="quantidade"
+                        value="1"
+                        min="1"
+                        required
+                    >
+
+                    <button type="submit">
+                        Adicionar ao carrinho
+                    </button>
+
+                </form>
+
+                {% else %}
+
+                <p class="sem-estoque">
+                    Produto sem estoque
+                </p>
+
+                <button
+                    type="button"
+                    disabled
+                >
+                    Indisponível
+                </button>
+
+                {% endif %}
+
+            </article>
+
+            {% else %}
+
+            <p>
+                Nenhum produto disponível.
+            </p>
+
+            {% endfor %}
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
